@@ -1,10 +1,12 @@
 # Created by Carlos Ramirez at 09/09/2022
 """Feature extractor class."""
 import os.path
-
+import subprocess
 from typing import Optional
-from tensorflow.keras.applications import (densenet, efficientnet_v2, inception_v3,
-                                           mobilenet_v2, resnet_v2)
+
+from tensorflow.keras.applications import (densenet, efficientnet_v2,
+                                           inception_v3, mobilenet_v2,
+                                           resnet_v2)
 
 
 class FeatureExtractor:
@@ -25,6 +27,7 @@ class FeatureExtractor:
         'resnet152': [resnet_v2.ResNet152V2, resnet_v2.preprocess_input],
     }
     """Class used to extract features from a directory"""
+
     def __init__(self, dir_path: str, model: str = 'resnet50', pooling: Optional[str] = None):
         """
         Initialize the model feature extractor and image loader.
@@ -50,6 +53,27 @@ class FeatureExtractor:
             pooling = None
         # Init model
         self._load_model(model=model, pooling=pooling)
+
+    def find_images_dir(self, path: Optional[str] = None):
+        """
+        Find recursively all the images in the input directory from constructor
+        or another path defined by the input parameter of this function
+        :param path: path to search images or None if we want to use class directory path
+        :return:
+            A list of images paths.
+        """
+        input_dir = self._input_dir if path is None else path
+        find_cmd = f"find {input_dir} -type f -exec file --mime-type {{}} \\+ "
+        find_cmd += "| awk -F: '{{if ($2 ~/image\\//) print $1}}'"
+        try:
+            images =\
+                subprocess.run(find_cmd, capture_output=True, shell=True).stdout.decode('utf-8')
+        except subprocess.SubprocessError:
+            print(f"[Error] Failed to search images in {input_dir}")
+            raise subprocess.SubprocessError
+        # Remove final empty line
+        list_images = images.split('\n')[:-1]
+        return list_images
 
     def print_model(self):
         """Print current model architecture"""

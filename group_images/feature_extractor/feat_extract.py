@@ -1,37 +1,62 @@
 # Created by Carlos Ramirez at 09/09/2022
 """Feature extractor class."""
+import logging
 import os.path
 import subprocess
 from typing import Optional
 
+import tensorflow as tf
 from tensorflow.keras.applications import (densenet, efficientnet_v2,
                                            inception_v3, mobilenet_v2,
                                            resnet_v2)
 
+from .image_loader import ImageLoader
+
 
 class FeatureExtractor:
     models = {
-        'densenet121': [densenet.DenseNet121, densenet.preprocess_input],
-        'densenet169': [densenet.DenseNet169, densenet.preprocess_input],
-        'densenet201': [densenet.DenseNet201, densenet.preprocess_input],
-        'efficientnetv2_s': [efficientnet_v2.EfficientNetV2S,
-                             efficientnet_v2.preprocess_input],
-        'efficientnetv2_m': [efficientnet_v2.EfficientNetV2M,
-                             efficientnet_v2.preprocess_input],
-        'efficientnetv2_l': [efficientnet_v2.EfficientNetV2L,
-                             efficientnet_v2.preprocess_input],
-        'inceptionv3': [inception_v3.InceptionV3, inception_v3.preprocess_input],
-        'mobilenet_v2': [mobilenet_v2.MobileNetV2, mobilenet_v2.preprocess_input],
-        'resnet50': [resnet_v2.ResNet50V2, resnet_v2.preprocess_input],
-        'resnet101': [resnet_v2.ResNet101V2, resnet_v2.preprocess_input],
-        'resnet152': [resnet_v2.ResNet152V2, resnet_v2.preprocess_input],
+        'densenet121': [densenet.DenseNet121,
+                        densenet.preprocess_input,
+                        (224, 224, 3)],
+        'densenet169': [densenet.DenseNet169,
+                        densenet.preprocess_input,
+                        (224, 224, 3)],
+        'densenet201': [densenet.DenseNet201,
+                        densenet.preprocess_input,
+                        (224, 224, 3)],
+        'efficientnetv2_b0': [efficientnet_v2.EfficientNetV2B0,
+                              efficientnet_v2.preprocess_input,
+                              (224, 224, 3)],
+        'efficientnetv2_b1': [efficientnet_v2.EfficientNetV2B1,
+                              efficientnet_v2.preprocess_input,
+                              (240, 240, 3)],
+        'efficientnetv2_b2': [efficientnet_v2.EfficientNetV2B2,
+                              efficientnet_v2.preprocess_input,
+                              (260, 260, 3)],
+        'inceptionv3': [inception_v3.InceptionV3,
+                        inception_v3.preprocess_input,
+                        (299, 299, 3)],
+        'mobilenet_v2': [mobilenet_v2.MobileNetV2,
+                         mobilenet_v2.preprocess_input,
+                         (224, 224, 3)],
+        'resnet50': [resnet_v2.ResNet50V2,
+                     resnet_v2.preprocess_input,
+                     (224, 224, 3)],
+        'resnet101': [resnet_v2.ResNet101V2,
+                      resnet_v2.preprocess_input,
+                      (224, 224, 3)],
+        'resnet152': [resnet_v2.ResNet152V2,
+                      resnet_v2.preprocess_input,
+                      (224, 224, 3)],
     }
     """Class used to extract features from a directory"""
 
-    def __init__(self, dir_path: str, model: str = 'resnet50', pooling: Optional[str] = None):
+    def __init__(self, dir_path: str, out_dir: str, model: str = 'resnet50',
+                 pooling: Optional[str] = None):
         """
         Initialize the model feature extractor and image loader.
         :param dir_path: path where our unsorted images are located.
+        :para out_dir: path to save the separated images
         :param model: model to be use as feature extractor, options are:
                       [densenet121, densenet169, densenet201, efficientnetv2_s,
                        efficientnetv2_m, efficientnetv2_l, inceptionv3, mobilenet_v2,
@@ -45,6 +70,8 @@ class FeatureExtractor:
         # Verify input path
         if not os.path.isdir(dir_path):
             raise NotADirectoryError(f"{dir_path} is not a valid directory.")
+        # we will verify if the directory exists when saving images.
+        self._out_dir = out_dir
         self._input_dir = dir_path
         # Clean input parameters
         model = model.casefold()
@@ -53,6 +80,62 @@ class FeatureExtractor:
             pooling = None
         # Init model
         self._load_model(model=model, pooling=pooling)
+        # Create ImageLoader
+        self._images_path = self.find_images_dir()
+        self._data_loader = ImageLoader(self._images_path, self._input_size[:2],
+                                        self._preprocess_fnc)
+        self._loader = tf.data.Dataset.from_generator(
+            self._data_loader,
+            output_types=(tf.float32, tf.string)
+        )
+
+    def get_features(self, batch_size: int = 8) -> dict:
+        """
+        Extract features from the images defined in the constructor.
+        :param batch_size: batch size to use for image processing
+        :return: a dictionary using the image path as key and the feature vector as content.
+        """
+        bs = self._loader.batch(batch_size)
+        dict_imgs = {}
+        for batch in bs:
+            input_batch, imgs_paths = batch
+            features = self._net.predict(input_batch)
+            # Add the features to our dictionary
+            for i in range(input_batch.shape[0]):
+                img_path = imgs_paths[i].numpy().decode('utf-8')
+                dict_imgs[img_path] = features
+        return dict_imgs
+
+    def update_input_dir(self, path: str) -> bool:
+        """
+        Updates the input directory.
+        :param path: a valid path to a new directory
+        :return: True if the update was successful and False otherwise.
+        """
+        if not os.path.isdir(path):
+            logging.warning(f"{path} is not a valid directory, ignoring...")
+            return False
+        images_paths = self.find_images_dir(path)
+        if len(images_paths) <= 0:
+            logging.warning(f"{path} does not contain images, ignoring...")
+            return False
+        # We did find images, so update it
+        logging.info("Updating images")
+        self._input_dir = path
+        self._images_path = images_paths
+        return True
+
+    def get_input_dir(self) -> str:
+        """Returns current input directory"""
+        return self._input_dir
+
+    def update_output_dir(self, out_dir: str) -> None:
+        """Updates the output directory"""
+        self._out_dir = out_dir
+
+    def get_output_dir(self) -> str:
+        """Returns current output directory"""
+        return self._out_dir
 
     def find_images_dir(self, path: Optional[str] = None):
         """
@@ -69,7 +152,7 @@ class FeatureExtractor:
             images =\
                 subprocess.run(find_cmd, capture_output=True, shell=True).stdout.decode('utf-8')
         except subprocess.SubprocessError:
-            print(f"[Error] Failed to search images in {input_dir}")
+            logging.error(f"[Error] Failed to search images in {input_dir}")
             raise subprocess.SubprocessError
         # Remove final empty line
         list_images = images.split('\n')[:-1]
@@ -85,8 +168,10 @@ class FeatureExtractor:
 
     def _load_model(self, model: str = 'resnet50', pooling: Optional[str] = None):
         """Load the selected model and preprocessing function."""
-        model_builder, self._preprocess_fnc = self._models.get(model, [None, None])
+        model_builder, self._preprocess_fnc, in_size = self._models.get(model, [None, None, None])
         if model_builder is None or self._preprocess_fnc is None:
             # Impossible to get a model from dictionary, return a default model
-            model_builder, self._preprocess_fnc = self._models['resnet50']
-        self._net = model_builder(include_top=False, weights='imagenet', pooling=pooling)
+            model_builder, self._preprocess_fnc, in_size = self._models['resnet50']
+        self._input_size = in_size
+        self._net = model_builder(include_top=False, input_shape=self._input_size,
+                                  weights='imagenet', pooling=pooling)

@@ -1,11 +1,11 @@
 # Created by Carlos Ramirez at 12/09/2022
 import logging
+import random
 from typing import Optional
 
-import numpy as np
-import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
 
@@ -30,7 +30,7 @@ class Separate:
         keys = list(self._dict_imgs.keys())
         # Max cluster must be smaller than the number of images
         if len(keys) <= self._max_cluster:
-            raise ValueError(f"max_cluster must be smaller than the number of images")
+            raise ValueError("max_cluster must be smaller than the number of images")
 
     def update_images(self, dict_imgs: dict) -> None:
         """Updates the dictionary of images"""
@@ -105,14 +105,63 @@ class Separate:
         logging.info(f"Best cluster is {best_cluster} with inertia {best_inertia}")
         out_dict = {}
         for idx, (image_path, feature) in enumerate(self._dict_imgs.items()):
-            out_dict[image_path] = best_model.labels_[idx]
+            out_dict[image_path] = self._best_model.labels_[idx]
         return out_dict
 
-    def plot_vectors(self, random_state=None):
-        """Experimental, plot images features in a 2d graph"""
+    def _get_examples_scatter(self):
+        """Randomly select one element from our database to draw in the scatterplot per cluster"""
+        labels = self._best_model.labels_
+        # Grab all examples
+        all_examples = {}
+        for idx, (image_path, _) in enumerate(self._dict_imgs.items()):
+            current_label = labels[idx]
+            if all_examples.get(current_label, None) is None:
+                all_examples[current_label] = [image_path]
+            else:
+                all_examples[current_label].append(image_path)
+        # Select randomly one element
+        examples = {}
+        for label, images_paths in all_examples.items():
+            examples[label] = {
+                'image_path': random.choice(images_paths),
+                'max_x': -np.inf,
+                'min_x': np.inf,
+                'max_y': -np.inf,
+                'min_y': np.inf
+            }
+        return examples
+
+    def _draw_examples_plot(self, ax, z, zoom):
+        """Draw our selected example from _get_examples_scatter in our plot"""
+        labels = self._best_model.labels_
+        examples = self._get_examples_scatter()
+        for idx in range(len(labels)):
+            examples[labels[idx]]['max_x'] = max(examples[labels[idx]]['max_x'], z[idx, 0])
+            examples[labels[idx]]['min_x'] = min(examples[labels[idx]]['min_x'], z[idx, 0])
+            examples[labels[idx]]['max_y'] = max(examples[labels[idx]]['max_y'], z[idx, 1])
+            examples[labels[idx]]['min_y'] = min(examples[labels[idx]]['min_x'], z[idx, 1])
+        for label, metadata in examples.items():
+            x_coor = metadata['min_x'] + (metadata['max_x'] - metadata['min_x']) / 2
+            y_coor = metadata['min_y'] + (metadata['max_y'] - metadata['min_y']) / 2
+            image = plt.imread(metadata['image_path'])
+            im = OffsetImage(image, zoom=zoom)
+            ab = AnnotationBbox(im, (x_coor, y_coor), frameon=False)
+            ax.add_artist(ab)
+
+    def plot_vectors(self, random_state: Optional[int] = None,
+                     zoom: Optional[float] = 0.05) -> None:
+        """
+        Experimental feature, plot images features in a 2d graph with an image in the
+        center of the cluster
+        :param random_state: optional int value to get random values
+        :param zoom: zoom to use in order to draw images in the plot values smaller than 1.0
+                     will decrease the images, otherwise it will increase
+        """
         if self._best_model is None:
             logging.warning("Please fit the data before plotting it.")
             return
+        if zoom <= 0.0:
+            raise ValueError("zoom parameter must be positive")
         labels = self._best_model.labels_
         n_clusters = self._best_model.cluster_centers_.shape[0]
         # Get the features from our dictionary as a list
@@ -123,14 +172,11 @@ class Separate:
                     perplexity=features.shape[0] / n_clusters)
         # fit the data
         z = tsne.fit_transform(features)
-        df = pd.DataFrame()
-        df["y"] = labels
-        print(type(z), z.shape)
-        df["comp-1"] = z[:, 0]
-        df["comp-2"] = z[:, 1]
-        sns.scatterplot(x="comp-1", y="comp-2", hue=df.y.tolist(),
-                        palette=sns.color_palette("hls",
-                                                  n_clusters),
-                        data=df).set(title="Clustered images")
+        # if everything work correctly, grab an example of every cluster
+        fig, ax = plt.subplots()
+        ax.scatter(x=z[:, 0], y=z[:, 1], c=labels)
+        ax.set_title('Clusters in data')
+        ax.set(xlabel='comp-1', ylabel='comp-2')
+        # Draw images in plot
+        self._draw_examples_plot(ax, z, zoom)
         plt.show()
-

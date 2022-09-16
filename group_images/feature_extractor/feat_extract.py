@@ -52,7 +52,7 @@ class FeatureExtractor:
     """Class used to extract features from a directory"""
 
     def __init__(self, dir_path: str, out_dir: str, model: str = 'resnet50',
-                 pooling: Optional[str] = None):
+                 pooling: Optional[str] = 'avg'):
         """
         Initialize the model feature extractor and image loader.
         :param dir_path: path where our unsorted images are located.
@@ -103,7 +103,7 @@ class FeatureExtractor:
             # Add the features to our dictionary
             for i in range(input_batch.shape[0]):
                 img_path = imgs_paths[i].numpy().decode('utf-8')
-                dict_imgs[img_path] = features[i]
+                dict_imgs[img_path] = features[i].flatten()
         return dict_imgs
 
     def update_input_dir(self, path: str) -> bool:

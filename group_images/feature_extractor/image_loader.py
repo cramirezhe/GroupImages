@@ -25,7 +25,6 @@ class ImageLoader:
         """Returns a new par input image, image path"""
         img = cv2.imread(self._list_paths[idx])
         img = cv2.resize(img, self._resize_dims, interpolation=cv2.INTER_CUBIC)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.float32)
         float_img = self._preprocess_fnc(img)
         return tf.convert_to_tensor(float_img, dtype=tf.float32), self._list_paths[idx]
 

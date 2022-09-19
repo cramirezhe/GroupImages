@@ -51,7 +51,7 @@ class FeatureExtractor:
     }
     """Class used to extract features from a directory"""
 
-    def __init__(self, dir_path: str, out_dir: str, model: str = 'resnet50',
+    def __init__(self, dir_path: str, model: str = 'resnet50',
                  pooling: Optional[str] = 'avg'):
         """
         Initialize the model feature extractor and image loader.
@@ -70,14 +70,12 @@ class FeatureExtractor:
         # Verify input path
         if not os.path.isdir(dir_path):
             raise NotADirectoryError(f"{dir_path} is not a valid directory.")
-        # we will verify if the directory exists when saving images.
-        self._out_dir = out_dir
         self._input_dir = dir_path
         # Clean input parameters
         model = model.casefold()
         if pooling not in ['avg', 'max']:
             # Supported modes are avg and max. Otherwise, None is selected
-            pooling = None
+            pooling = 'avg'
         # Init model
         self._load_model(model=model, pooling=pooling)
         # Create ImageLoader
@@ -128,14 +126,6 @@ class FeatureExtractor:
     def get_input_dir(self) -> str:
         """Returns current input directory"""
         return self._input_dir
-
-    def update_output_dir(self, out_dir: str) -> None:
-        """Updates the output directory"""
-        self._out_dir = out_dir
-
-    def get_output_dir(self) -> str:
-        """Returns current output directory"""
-        return self._out_dir
 
     def find_images_dir(self, path: Optional[str] = None):
         """

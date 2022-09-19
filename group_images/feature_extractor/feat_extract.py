@@ -75,7 +75,7 @@ class FeatureExtractor:
         model = model.casefold()
         if pooling not in ['avg', 'max']:
             # Supported modes are avg and max. Otherwise, None is selected
-            pooling = None
+            pooling = 'avg'
         # Init model
         self._load_model(model=model, pooling=pooling)
         # Create ImageLoader

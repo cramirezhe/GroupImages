@@ -30,7 +30,8 @@ setup(
     python_requires='>=3.8.9',
     packages=[
         'group_images.feature_extractor',
-        'group_images.separate'
+        'group_images.separate',
+        'group_images'
     ],
     entry_points={
         'console_scripts': ['cluster_images = group_images.main:terminal_exec']

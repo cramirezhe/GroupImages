@@ -7,6 +7,7 @@ from .interface_file import run_by_conf_file, cluster_images
 
 
 def terminal_exec():
+    logging.getLogger().setLevel(logging.INFO)
     ap = argparse.ArgumentParser(description="Cluster images in a given directory")
     ap.add_argument('-m', '--mode', required=True, type=int,
                     help="Select mode to use: 0= by configuration file, 1= by args parameters")

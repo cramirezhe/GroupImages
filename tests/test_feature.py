@@ -12,7 +12,14 @@ class TestFeatureExtractor(unittest.TestCase):
         self._models = list(FeatureExtractor.models.keys())
         logging.getLogger().setLevel(logging.INFO)
 
+    def test_find_images(self):
+        """Test finding images in a directory"""
+        feat_ext = FeatureExtractor(self._imgs_dir)
+        images_paths = feat_ext.find_images_dir()
+        self.assertEqual(len(images_paths), 17)
+
     def test_feature_extractor(self):
+        """Test feature extraction using different pooling techniques"""
         poolings = ['avg', 'max', None]
         for model_id in self._models:
             for pool in poolings:

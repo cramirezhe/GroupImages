@@ -15,7 +15,7 @@ def save_images(result: dict, out_dir: str, zfill: Optional[int] = None) -> None
     Args:
         result (dict): return value from class Separate.cluster_images
         out_dir (str): output directory to save images
-        zfill Optional[int]: optional parameters to add left zeros to the output cluster
+        zfill (Optional[int]): optional parameters to add left zeros to the output cluster
                              directories
 
     Returns:

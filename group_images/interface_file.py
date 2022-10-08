@@ -1,5 +1,4 @@
 # Created by Carlos Ramirez at 16/09/2022
-import argparse
 import configparser
 import logging
 import os
@@ -13,10 +12,14 @@ from .separate import Separate
 def save_images(result: dict, out_dir: str, zfill: Optional[int] = None) -> None:
     """
     Save result from clustering to the output dictionaru
-    :param result: return value from class Separate.cluster_images
-    :param out_dir: output directory to save images
-    :param zfill: optional parameters to add left zeros to the output cluster directories
-    :return: None
+    Args:
+        result (dict): return value from class Separate.cluster_images
+        out_dir (str): output directory to save images
+        zfill (Optional[int]): optional parameters to add left zeros to the output cluster
+                             directories
+
+    Returns:
+        None
     """
     # Create output directory
     os.makedirs(out_dir, exist_ok=True)
@@ -31,21 +34,28 @@ def cluster_images(params: dict) -> None:
     """
     Easy mode to cluster images with less parameters, for a more complete experience
     consider using FeatureExtractor and Separate by yourself.
-    :param params: dictionary including the following fields:
-        input_dir [str]: path to the directory containing the images.
-        output_dir [str]: destination directory where the images will be stored.
-        pooling [str or None] (optional): pooling for the feature extractor [avg or max]
-                                  (by default avg) set it to None to remove pooling layer.
-        batch_size [int] (optional): size of the input batch for
-                                     the feature extractor (by default 8).
-        min_cluster [int]: minimum number of cluster we are looking for (must be > 1).
-        max_cluster [int]: maximum number of cluster we are looking for (must be < than the
-                           # of images in input_dir.
-        iterations [int] (optional): number of iterations to run our kmeans algorithm
-        random_state [int] (optional): initial random state, use it to repeat results
-        early_stop_inertia [float] (optional): in kmeans inertia is bellow this value we will
-                                               stop the algorithm.
-    :return: None
+    Args:
+        params (dict): dictionary including the following fields:
+                       input_dir [str]: path to the directory containing the images.
+                       output_dir [str]: destination directory where the images will be stored.
+                       pooling [str or None] (optional): pooling for the feature extractor
+                                                         [avg or max] (by default avg) set it
+                                                         to None to remove pooling layer.
+                       batch_size [int] (optional): size of the input batch for
+                                                    the feature extractor (by default 8).
+                       min_cluster [int]: minimum number of cluster we are looking
+                                          for (must be > 1).
+                       max_cluster [int]: maximum number of cluster we are looking for
+                       (must be < than the # of images in input_dir.
+                       iterations [int] (optional): number of iterations to run our
+                                                    kmeans algorithm.
+                       random_state [int] (optional): initial random state, use it to repeat
+                                                      results.
+                       early_stop_inertia [float] (optional): in kmeans inertia is bellow
+                                                              this value we will stop the algorithm.
+
+    Returns:
+        None
     """
     extractor = FeatureExtractor(params['input_dir'], params['output_dir'],
                                  params.get('pooling', 'avg'))
@@ -73,12 +83,16 @@ def validate_section_value(config: configparser.ConfigParser, section: str,
                            key: str, msg: str) -> str:
     """
     Validates that a configuration file in ini format has a given field in a given section.
-    :param config: parsed configuration file
-    :param section: section to analyse
-    :param key: field in the section we are looking for
-    :param msg: error message
-    :return: the value in the configuration file in string format
-    :raise: ValueError if the field is not found in the section
+    Args:
+        config (ConfigParser): parsed configuration file
+        section (str): section to analyse
+        key (str): field in the section we are looking for
+        msg (str): error message
+
+    Returns:
+        str: the value in the configuration file in string format
+    Raises:
+        ValueError: if the field is not found in the section
     """
     val = config[section].get(key, None)
     if val is None:

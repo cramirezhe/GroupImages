@@ -14,9 +14,10 @@ class Separate:
     def __init__(self, dict_imgs: dict, min_cluster: int = 2, max_cluster: int = 3):
         """
         Initializes the class that will separate images in clusters.
-        :param dict_imgs: dictionary in format key=image_path value=image_features
-        :param min_cluster: start point to search for optimal # of cluster
-        :param max_cluster: limit # of clusters
+        Args:
+            dict_imgs (dict): dictionary in format key=image_path value=image_features
+            min_cluster (int): start point to search for optimal # of cluster
+            max_cluster (int): limit # of clusters
         """
         self._dict_imgs = dict_imgs
         # Verify min and max values
@@ -75,12 +76,14 @@ class Separate:
                        early_stop_inertia: float = 0.0) -> dict:
         """
         Search for the optimal # of clusters for a given set of images
-        :param iterations: # of iteration to run clustering fit algorithm
-        :param random_state: random_state to reproduce result, by default it is None
-        :param early_stop_inertia: value to stop looking for optimal cluster if cluster inertia
-                                   is smaller than this value
-        :return:
-            A dictionary with key=image_path and value=matching cluster
+        Args:
+            iterations (int): # of iteration to run clustering fit algorithm
+            random_state (Optional[int]): random_state to reproduce result, by default it is None
+            early_stop_inertia (float): value to stop looking for optimal cluster if cluster
+                                        inertia is smaller than this value
+
+        Returns:
+            dict: A dictionary with key=image_path and value=matching cluster
         """
         # Get the features from our dictionary as a list
         features = list(self._dict_imgs.values())
@@ -152,10 +155,13 @@ class Separate:
                      zoom: Optional[float] = 0.05) -> None:
         """
         Experimental feature, plot images features in a 2d graph with an image in the
-        center of the cluster
-        :param random_state: optional int value to get random values
-        :param zoom: zoom to use in order to draw images in the plot values smaller than 1.0
-                     will decrease the images, otherwise it will increase
+        Args:
+            random_state Optional[int]: optional int value to get random values
+            zoom: zoom to use in order to draw images in the plot values smaller than 1.0
+                  will decrease the images, otherwise it will increase
+
+        Returns:
+            None
         """
         if self._best_model is None:
             logging.warning("Please fit the data before plotting it.")

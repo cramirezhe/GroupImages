@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>group_images.interface_file API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>group_images.interface_file</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Created by Carlos Ramirez at 16/09/2022
+import argparse
+import configparser
+import logging
+import os
+import shutil
+from typing import List, Optional
+
+from .feature_extractor import FeatureExtractor
+from .separate import Separate
+
+
+def save_images(result: dict, out_dir: str, zfill: Optional[int] = None) -&gt; None:
+    &#34;&#34;&#34;
+    Save result from clustering to the output dictionaru
+    Args:
+        result (dict): return value from class Separate.cluster_images
+        out_dir (str): output directory to save images
+        zfill Optional[int]: optional parameters to add left zeros to the output cluster
+                             directories
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    # Create output directory
+    os.makedirs(out_dir, exist_ok=True)
+    for image_path, cluster_id in result.items():
+        dir_name = str(cluster_id) if zfill is None else str(cluster_id).zfill(zfill)
+        dir_path = os.path.join(out_dir, dir_name)
+        os.makedirs(dir_path, exist_ok=True)
+        shutil.copy2(image_path, dir_path)
+
+
+def cluster_images(params: dict) -&gt; None:
+    &#34;&#34;&#34;
+    Easy mode to cluster images with less parameters, for a more complete experience
+    consider using FeatureExtractor and Separate by yourself.
+    Args:
+        params (dict): dictionary including the following fields:
+                       input_dir [str]: path to the directory containing the images.
+                       output_dir [str]: destination directory where the images will be stored.
+                       pooling [str or None] (optional): pooling for the feature extractor
+                                                         [avg or max] (by default avg) set it
+                                                         to None to remove pooling layer.
+                       batch_size [int] (optional): size of the input batch for
+                                                    the feature extractor (by default 8).
+                       min_cluster [int]: minimum number of cluster we are looking
+                                          for (must be &gt; 1).
+                       max_cluster [int]: maximum number of cluster we are looking for
+                       (must be &lt; than the # of images in input_dir.
+                       iterations [int] (optional): number of iterations to run our
+                                                    kmeans algorithm.
+                       random_state [int] (optional): initial random state, use it to repeat
+                                                      results.
+                       early_stop_inertia [float] (optional): in kmeans inertia is bellow
+                                                              this value we will stop the algorithm.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    extractor = FeatureExtractor(params[&#39;input_dir&#39;], params[&#39;output_dir&#39;],
+                                 params.get(&#39;pooling&#39;, &#39;avg&#39;))
+    dict_features = extractor.get_features(batch_size=params.get(&#39;batch_size&#39;, 8))
+    cluster = Separate(dict_features, params[&#39;min_cluster&#39;], params[&#39;max_cluster&#39;])
+    result = cluster.cluster_images(
+        iterations=params.get(&#39;iterations&#39;, 100),
+        random_state=params.get(&#39;random_state&#39;, None),
+        early_stop_inertia=params.get(&#39;stop_inertia&#39;, None)
+    )
+    zfill = params.get(&#39;zfill&#39;, None)
+    save_images(result, params[&#39;output_dir&#39;], None if zfill is None else int(zfill))
+
+
+def verify_ini_sections(config: configparser.ConfigParser,  sections: List[str]) -&gt; bool:
+    &#34;&#34;&#34;Verifies if a ini file has all the necessary sections.&#34;&#34;&#34;
+    for section in sections:
+        if section not in config.sections():
+            logging.error(f&#34;{section} is not part of {config.sections()} in config file.&#34;)
+            return False
+    return True
+
+
+def validate_section_value(config: configparser.ConfigParser, section: str,
+                           key: str, msg: str) -&gt; str:
+    &#34;&#34;&#34;
+    Validates that a configuration file in ini format has a given field in a given section.
+    Args:
+        config (ConfigParser): parsed configuration file
+        section (str): section to analyse
+        key (str): field in the section we are looking for
+        msg (str): error message
+
+    Returns:
+        str: the value in the configuration file in string format
+    Raises:
+        ValueError: if the field is not found in the section
+    &#34;&#34;&#34;
+    val = config[section].get(key, None)
+    if val is None:
+        raise ValueError(msg)
+    return str(val)
+
+
+def parse_conf_file(path: str) -&gt; dict:
+    &#34;&#34;&#34;Parses a configuration file in ini format&#34;&#34;&#34;
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f&#34;{path} does not exists&#34;)
+    sections = [&#39;GENERAL&#39;, &#39;FEAT_EXT&#39;, &#39;CLUSTER&#39;]
+    config = configparser.ConfigParser(inline_comment_prefixes=&#39;;&#39;)
+    config.read(path)
+    if not verify_ini_sections(config, sections):
+        raise ValueError
+    params = {
+        &#39;input_dir&#39;: validate_section_value(
+            config,
+            &#39;GENERAL&#39;, &#39;INPUT_PATH&#39;,
+            &#34;INPUT_PATH was not found in GENERAL section&#34;
+        ),
+        &#39;output_dir&#39;: validate_section_value(
+            config,
+            &#39;GENERAL&#39;, &#39;OUTPUT_PATH&#39;,
+            &#34;OUTPUT_PATH was not found in GENERAL section&#34;
+        ),
+        &#39;model&#39;: validate_section_value(
+            config,
+            &#39;FEAT_EXT&#39;, &#39;MODEL&#39;,
+            &#34;MODEL was not found in FEAT_EXT section&#34;),
+        &#39;pooling&#39;: config[&#39;FEAT_EXT&#39;].get(&#39;POOLING&#39;, None),
+        &#39;batch_size&#39;: int(config[&#39;FEAT_EXT&#39;].get(&#39;BATCH_SIZE&#39;, &#39;4&#39;)),
+        &#39;min_cluster&#39;: int(validate_section_value(
+            config,
+            &#39;CLUSTER&#39;,
+            &#39;MIN_CLUSTER&#39;,
+            &#34;MIN_CLUSTER was not found in CLUSTER section&#34;
+        )),
+        &#39;max_cluster&#39;: int(validate_section_value(
+            config,
+            &#39;CLUSTER&#39;,
+            &#39;MAX_CLUSTER&#39;,
+            &#34;MAX_CLUSTER was not found in CLUSTER section&#34;
+        )),
+        &#39;iterations&#39;: int(config[&#39;CLUSTER&#39;].get(&#39;ITERATIONS&#39;, &#39;100&#39;)),
+    }
+    params[&#39;random_state&#39;] = config[&#39;CLUSTER&#39;].get(&#39;RANDOM_STATE&#39;, None)
+    if params[&#39;random_state&#39;] is not None:
+        params[&#39;random_state&#39;] = int(params[&#39;random_state&#39;])
+    params[&#39;stop_inertia&#39;] = config[&#39;CLUSTER&#39;].get(&#39;STOP_INERTIA&#39;, None)
+    if params[&#39;stop_inertia&#39;] is not None:
+        params[&#39;stop_inertia&#39;] = float(params[&#39;stop_inertia&#39;])
+    return params
+
+
+def run_by_conf_file(path: str) -&gt; None:
+    &#34;&#34;&#34;Cluster images using a configuration file as input.&#34;&#34;&#34;
+    params = parse_conf_file(path)
+    cluster_images(params)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="group_images.interface_file.cluster_images"><code class="name flex">
+<span>def <span class="ident">cluster_images</span></span>(<span>params: dict) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Easy mode to cluster images with less parameters, for a more complete experience
+consider using FeatureExtractor and Separate by yourself.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>dictionary including the following fields:
+input_dir [str]: path to the directory containing the images.
+output_dir [str]: destination directory where the images will be stored.
+pooling [str or None] (optional): pooling for the feature extractor
+[avg or max] (by default avg) set it
+to None to remove pooling layer.
+batch_size [int] (optional): size of the input batch for
+the feature extractor (by default 8).
+min_cluster [int]: minimum number of cluster we are looking
+for (must be &gt; 1).
+max_cluster [int]: maximum number of cluster we are looking for
+(must be &lt; than the # of images in input_dir.
+iterations [int] (optional): number of iterations to run our
+kmeans algorithm.
+random_state [int] (optional): initial random state, use it to repeat
+results.
+early_stop_inertia [float] (optional): in kmeans inertia is bellow
+this value we will stop the algorithm.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cluster_images(params: dict) -&gt; None:
+    &#34;&#34;&#34;
+    Easy mode to cluster images with less parameters, for a more complete experience
+    consider using FeatureExtractor and Separate by yourself.
+    Args:
+        params (dict): dictionary including the following fields:
+                       input_dir [str]: path to the directory containing the images.
+                       output_dir [str]: destination directory where the images will be stored.
+                       pooling [str or None] (optional): pooling for the feature extractor
+                                                         [avg or max] (by default avg) set it
+                                                         to None to remove pooling layer.
+                       batch_size [int] (optional): size of the input batch for
+                                                    the feature extractor (by default 8).
+                       min_cluster [int]: minimum number of cluster we are looking
+                                          for (must be &gt; 1).
+                       max_cluster [int]: maximum number of cluster we are looking for
+                       (must be &lt; than the # of images in input_dir.
+                       iterations [int] (optional): number of iterations to run our
+                                                    kmeans algorithm.
+                       random_state [int] (optional): initial random state, use it to repeat
+                                                      results.
+                       early_stop_inertia [float] (optional): in kmeans inertia is bellow
+                                                              this value we will stop the algorithm.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    extractor = FeatureExtractor(params[&#39;input_dir&#39;], params[&#39;output_dir&#39;],
+                                 params.get(&#39;pooling&#39;, &#39;avg&#39;))
+    dict_features = extractor.get_features(batch_size=params.get(&#39;batch_size&#39;, 8))
+    cluster = Separate(dict_features, params[&#39;min_cluster&#39;], params[&#39;max_cluster&#39;])
+    result = cluster.cluster_images(
+        iterations=params.get(&#39;iterations&#39;, 100),
+        random_state=params.get(&#39;random_state&#39;, None),
+        early_stop_inertia=params.get(&#39;stop_inertia&#39;, None)
+    )
+    zfill = params.get(&#39;zfill&#39;, None)
+    save_images(result, params[&#39;output_dir&#39;], None if zfill is None else int(zfill))</code></pre>
+</details>
+</dd>
+<dt id="group_images.interface_file.parse_conf_file"><code class="name flex">
+<span>def <span class="ident">parse_conf_file</span></span>(<span>path: str) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parses a configuration file in ini format</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_conf_file(path: str) -&gt; dict:
+    &#34;&#34;&#34;Parses a configuration file in ini format&#34;&#34;&#34;
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f&#34;{path} does not exists&#34;)
+    sections = [&#39;GENERAL&#39;, &#39;FEAT_EXT&#39;, &#39;CLUSTER&#39;]
+    config = configparser.ConfigParser(inline_comment_prefixes=&#39;;&#39;)
+    config.read(path)
+    if not verify_ini_sections(config, sections):
+        raise ValueError
+    params = {
+        &#39;input_dir&#39;: validate_section_value(
+            config,
+            &#39;GENERAL&#39;, &#39;INPUT_PATH&#39;,
+            &#34;INPUT_PATH was not found in GENERAL section&#34;
+        ),
+        &#39;output_dir&#39;: validate_section_value(
+            config,
+            &#39;GENERAL&#39;, &#39;OUTPUT_PATH&#39;,
+            &#34;OUTPUT_PATH was not found in GENERAL section&#34;
+        ),
+        &#39;model&#39;: validate_section_value(
+            config,
+            &#39;FEAT_EXT&#39;, &#39;MODEL&#39;,
+            &#34;MODEL was not found in FEAT_EXT section&#34;),
+        &#39;pooling&#39;: config[&#39;FEAT_EXT&#39;].get(&#39;POOLING&#39;, None),
+        &#39;batch_size&#39;: int(config[&#39;FEAT_EXT&#39;].get(&#39;BATCH_SIZE&#39;, &#39;4&#39;)),
+        &#39;min_cluster&#39;: int(validate_section_value(
+            config,
+            &#39;CLUSTER&#39;,
+            &#39;MIN_CLUSTER&#39;,
+            &#34;MIN_CLUSTER was not found in CLUSTER section&#34;
+        )),
+        &#39;max_cluster&#39;: int(validate_section_value(
+            config,
+            &#39;CLUSTER&#39;,
+            &#39;MAX_CLUSTER&#39;,
+            &#34;MAX_CLUSTER was not found in CLUSTER section&#34;
+        )),
+        &#39;iterations&#39;: int(config[&#39;CLUSTER&#39;].get(&#39;ITERATIONS&#39;, &#39;100&#39;)),
+    }
+    params[&#39;random_state&#39;] = config[&#39;CLUSTER&#39;].get(&#39;RANDOM_STATE&#39;, None)
+    if params[&#39;random_state&#39;] is not None:
+        params[&#39;random_state&#39;] = int(params[&#39;random_state&#39;])
+    params[&#39;stop_inertia&#39;] = config[&#39;CLUSTER&#39;].get(&#39;STOP_INERTIA&#39;, None)
+    if params[&#39;stop_inertia&#39;] is not None:
+        params[&#39;stop_inertia&#39;] = float(params[&#39;stop_inertia&#39;])
+    return params</code></pre>
+</details>
+</dd>
+<dt id="group_images.interface_file.run_by_conf_file"><code class="name flex">
+<span>def <span class="ident">run_by_conf_file</span></span>(<span>path: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Cluster images using a configuration file as input.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_by_conf_file(path: str) -&gt; None:
+    &#34;&#34;&#34;Cluster images using a configuration file as input.&#34;&#34;&#34;
+    params = parse_conf_file(path)
+    cluster_images(params)</code></pre>
+</details>
+</dd>
+<dt id="group_images.interface_file.save_images"><code class="name flex">
+<span>def <span class="ident">save_images</span></span>(<span>result: dict, out_dir: str, zfill: Optional[int] = None) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Save result from clustering to the output dictionaru</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>result</code></strong> :&ensp;<code>dict</code></dt>
+<dd>return value from class Separate.cluster_images</dd>
+<dt><strong><code>out_dir</code></strong> :&ensp;<code>str</code></dt>
+<dd>output directory to save images</dd>
+</dl>
+<p>zfill Optional[int]: optional parameters to add left zeros to the output cluster
+directories</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_images(result: dict, out_dir: str, zfill: Optional[int] = None) -&gt; None:
+    &#34;&#34;&#34;
+    Save result from clustering to the output dictionaru
+    Args:
+        result (dict): return value from class Separate.cluster_images
+        out_dir (str): output directory to save images
+        zfill Optional[int]: optional parameters to add left zeros to the output cluster
+                             directories
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    # Create output directory
+    os.makedirs(out_dir, exist_ok=True)
+    for image_path, cluster_id in result.items():
+        dir_name = str(cluster_id) if zfill is None else str(cluster_id).zfill(zfill)
+        dir_path = os.path.join(out_dir, dir_name)
+        os.makedirs(dir_path, exist_ok=True)
+        shutil.copy2(image_path, dir_path)</code></pre>
+</details>
+</dd>
+<dt id="group_images.interface_file.validate_section_value"><code class="name flex">
+<span>def <span class="ident">validate_section_value</span></span>(<span>config: configparser.ConfigParser, section: str, key: str, msg: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validates that a configuration file in ini format has a given field in a given section.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>config</code></strong> :&ensp;<code>ConfigParser</code></dt>
+<dd>parsed configuration file</dd>
+<dt><strong><code>section</code></strong> :&ensp;<code>str</code></dt>
+<dd>section to analyse</dd>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
+<dd>field in the section we are looking for</dd>
+<dt><strong><code>msg</code></strong> :&ensp;<code>str</code></dt>
+<dd>error message</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>the value in the configuration file in string format</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>if the field is not found in the section</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_section_value(config: configparser.ConfigParser, section: str,
+                           key: str, msg: str) -&gt; str:
+    &#34;&#34;&#34;
+    Validates that a configuration file in ini format has a given field in a given section.
+    Args:
+        config (ConfigParser): parsed configuration file
+        section (str): section to analyse
+        key (str): field in the section we are looking for
+        msg (str): error message
+
+    Returns:
+        str: the value in the configuration file in string format
+    Raises:
+        ValueError: if the field is not found in the section
+    &#34;&#34;&#34;
+    val = config[section].get(key, None)
+    if val is None:
+        raise ValueError(msg)
+    return str(val)</code></pre>
+</details>
+</dd>
+<dt id="group_images.interface_file.verify_ini_sections"><code class="name flex">
+<span>def <span class="ident">verify_ini_sections</span></span>(<span>config: configparser.ConfigParser, sections: List[str]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Verifies if a ini file has all the necessary sections.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def verify_ini_sections(config: configparser.ConfigParser,  sections: List[str]) -&gt; bool:
+    &#34;&#34;&#34;Verifies if a ini file has all the necessary sections.&#34;&#34;&#34;
+    for section in sections:
+        if section not in config.sections():
+            logging.error(f&#34;{section} is not part of {config.sections()} in config file.&#34;)
+            return False
+    return True</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="group_images" href="index.html">group_images</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="group_images.interface_file.cluster_images" href="#group_images.interface_file.cluster_images">cluster_images</a></code></li>
+<li><code><a title="group_images.interface_file.parse_conf_file" href="#group_images.interface_file.parse_conf_file">parse_conf_file</a></code></li>
+<li><code><a title="group_images.interface_file.run_by_conf_file" href="#group_images.interface_file.run_by_conf_file">run_by_conf_file</a></code></li>
+<li><code><a title="group_images.interface_file.save_images" href="#group_images.interface_file.save_images">save_images</a></code></li>
+<li><code><a title="group_images.interface_file.validate_section_value" href="#group_images.interface_file.validate_section_value">validate_section_value</a></code></li>
+<li><code><a title="group_images.interface_file.verify_ini_sections" href="#group_images.interface_file.verify_ini_sections">verify_ini_sections</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

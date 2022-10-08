@@ -3,7 +3,7 @@ import argparse
 import logging
 
 from . import __version__
-from .interface_file import run_by_conf_file, cluster_images
+from .interface_file import cluster_images, run_by_conf_file
 
 
 def terminal_exec():

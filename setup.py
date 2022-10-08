@@ -2,6 +2,10 @@
 import platform
 from distutils.core import setup
 from group_images import __author__, __email__, __version__
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 id_os = platform.system()
 
@@ -13,12 +17,14 @@ requirements = [
 ]
 
 if id_os == 'Darwin':
+    if platform.processor() != 'arm':
+        raise OSError("I only support Apple m1 and m2 processors.")
     requirements.append('tensorflow-macos==2.9.2')
     requirements.append('tensorflow-metal==0.5.1')
 elif id_os == 'Linux':
     requirements.append('tensorflow==2.9.2')
 else:
-    raise OSError(f"{id_os} is not sopported")
+    raise OSError(f"{id_os} is not supported")
 
 setup(
     name='GroupImages',
@@ -35,5 +41,7 @@ setup(
     ],
     entry_points={
         'console_scripts': ['cluster_images = group_images.main:terminal_exec']
-    }
+    },
+    long_description=long_description,
+    long_description_content_type='text/markdown'
 )

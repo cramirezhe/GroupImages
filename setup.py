@@ -2,6 +2,10 @@
 import platform
 from distutils.core import setup
 from group_images import __author__, __email__, __version__
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 id_os = platform.system()
 
@@ -37,5 +41,7 @@ setup(
     ],
     entry_points={
         'console_scripts': ['cluster_images = group_images.main:terminal_exec']
-    }
+    },
+    long_description=long_description,
+    long_description_content_type='text/markdown'
 )

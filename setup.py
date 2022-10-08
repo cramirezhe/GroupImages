@@ -13,12 +13,14 @@ requirements = [
 ]
 
 if id_os == 'Darwin':
+    if platform.processor() != 'arm':
+        raise OSError("I only support Apple m1 and m2 processors.")
     requirements.append('tensorflow-macos==2.9.2')
     requirements.append('tensorflow-metal==0.5.1')
 elif id_os == 'Linux':
     requirements.append('tensorflow==2.9.2')
 else:
-    raise OSError(f"{id_os} is not sopported")
+    raise OSError(f"{id_os} is not supported")
 
 setup(
     name='GroupImages',

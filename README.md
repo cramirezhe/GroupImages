@@ -38,7 +38,6 @@
         <li><a href="##package">Package</a></li>
       </ul>
     </li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 

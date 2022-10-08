@@ -2,7 +2,7 @@
 import logging
 import os.path
 import subprocess
-from typing import Optional, List
+from typing import List, Optional
 
 import tensorflow as tf
 from tensorflow.keras.applications import (densenet, efficientnet_v2,

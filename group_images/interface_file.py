@@ -1,5 +1,4 @@
 # Created by Carlos Ramirez at 16/09/2022
-import argparse
 import configparser
 import logging
 import os

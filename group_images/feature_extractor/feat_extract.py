@@ -1,9 +1,8 @@
 # Created by Carlos Ramirez at 09/09/2022
-"""Feature extractor class."""
 import logging
 import os.path
 import subprocess
-from typing import Optional
+from typing import Optional, List
 
 import tensorflow as tf
 from tensorflow.keras.applications import (densenet, efficientnet_v2,
@@ -14,6 +13,7 @@ from .image_loader import ImageLoader
 
 
 class FeatureExtractor:
+    """Class used to extract features from a directory"""
     models = {
         'densenet121': [densenet.DenseNet121,
                         densenet.preprocess_input,
@@ -49,22 +49,18 @@ class FeatureExtractor:
                       resnet_v2.preprocess_input,
                       (224, 224, 3)],
     }
-    """Class used to extract features from a directory"""
+    """Dictionary used to select models and preprocessing functions"""
 
     def __init__(self, dir_path: str, model: str = 'resnet50',
                  pooling: Optional[str] = 'avg'):
         """
         Initialize the model feature extractor and image loader.
-        :param dir_path: path where our unsorted images are located.
-        :para out_dir: path to save the separated images
-        :param model: model to be use as feature extractor, options are:
-                      [densenet121, densenet169, densenet201, efficientnetv2_s,
-                       efficientnetv2_m, efficientnetv2_l, inceptionv3, mobilenet_v2,
-                       resnet50, resnet101, resnet152].
-                       By default, we will use resnet50.
-        :param pooling: Pooling technique for the neural network default is None, this means that
-                        we will use the 4D output vector as features. Otherwise you can select
-                        between 'avg' and 'max' pooling.
+        Args:
+            dir_path: path where our unsorted images are located.
+            model: model to be use as feature extractor, by default, we will use resnet50.
+            pooling: Pooling technique for the neural network default is None, this means that
+                     we will use the 4D output vector as features. Otherwise you can select
+                     between 'avg' and 'max' pooling.
         """
         self._models = FeatureExtractor.models
         # Verify input path
@@ -90,8 +86,11 @@ class FeatureExtractor:
     def get_features(self, batch_size: int = 8) -> dict:
         """
         Extract features from the images defined in the constructor.
-        :param batch_size: batch size to use for image processing
-        :return: a dictionary using the image path as key and the feature vector as content.
+        Args:
+            batch_size (int): batch size to use for image processing
+
+        Returns:
+            dict: a dictionary using the image path as key and the feature vector as content.
         """
         bs = self._loader.batch(batch_size)
         dict_imgs = {}
@@ -107,8 +106,11 @@ class FeatureExtractor:
     def update_input_dir(self, path: str) -> bool:
         """
         Updates the input directory.
-        :param path: a valid path to a new directory
-        :return: True if the update was successful and False otherwise.
+        Args:
+            path: a valid path to a new directory
+
+        Returns:
+            bool: True if the update was successful and False otherwise.
         """
         if not os.path.isdir(path):
             logging.warning(f"{path} is not a valid directory, ignoring...")
@@ -127,13 +129,15 @@ class FeatureExtractor:
         """Returns current input directory"""
         return self._input_dir
 
-    def find_images_dir(self, path: Optional[str] = None):
+    def find_images_dir(self, path: Optional[str] = None) -> List[str]:
         """
         Find recursively all the images in the input directory from constructor
         or another path defined by the input parameter of this function
-        :param path: path to search images or None if we want to use class directory path
-        :return:
-            A list of images paths.
+        Args:
+            path: path to search images or None if we want to use class directory path
+
+        Returns:
+            List[str]: A list of images paths.
         """
         input_dir = self._input_dir if path is None else path
         find_cmd = f"find {input_dir} -type f -exec file --mime-type {{}} \\+ "

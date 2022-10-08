@@ -7,15 +7,16 @@ import tensorflow as tf
 
 
 class ImageLoader:
-
+    """Creates a loader to preprocess input images"""
     def __init__(self, list_paths: List[str],
                  resize_shape: Tuple[int, int],
                  preprocessing: Callable[[np.ndarray, str], np.ndarray]):
         """
         Initialized our Image Loader
-        :param list_paths: a list of str of the input images path
-        :param resize_shape: neural network input shape
-        :param preprocessing: pre processing function for normalization
+        Args:
+            list_paths List[str]: a list of str of the input images path
+            resize_shape Tuple[int, int]: neural network input shape
+            preprocessing Callable: pre processing function for normalization
         """
         self._list_paths = list_paths
         self._preprocess_fnc = preprocessing
